@@ -1,0 +1,6 @@
+@oceane_survey_api_HostAddress = http://localhost:5257
+
+GET {{oceane_survey_api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
