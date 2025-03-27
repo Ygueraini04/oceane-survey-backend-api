@@ -1,21 +1,20 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using oceane_survey_api.Helpers.Enums;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace oceane_survey_api.Models
 {
     public class Survey
     {
         [Key]
-        public int Id { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public long Id { get; set; }
+        [Required]
         public string Title { get; set; }
-        public string Description { get; set; }
-        public DateTime CreationDate { get; set; }
-        public DateTime LastModifiedDate { get; set; }
-        public string Status { get; set; }
-
-        // Relation n:m avec Recipient
-        public ICollection<SurveyRecipient> SurveyRecipients { get; set; } = new List<SurveyRecipient>();
-
-        // Relation 1:n avec Question
+        public string? Description { get; set; }
+        public DateTime? CreationDate { get; set; }
+        public DateTime? LastModifiedDate { get; set; }
+        public SurveyStatus Status { get; set; } = SurveyStatus.DRAFT;
         public ICollection<Question> Questions { get; set; } = new List<Question>();
     }
 }

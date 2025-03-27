@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace oceane_survey_api.Migrations
 {
     [DbContext(typeof(SurveyContext))]
-    [Migration("20250321125225_survey")]
-    partial class survey
+    [Migration("20250325120422_Surveys")]
+    partial class Surveys
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -26,11 +26,11 @@ namespace oceane_survey_api.Migrations
 
             modelBuilder.Entity("oceane_survey_api.Models.Question", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<string>("ConditionalLogic")
                         .IsRequired()
@@ -42,8 +42,8 @@ namespace oceane_survey_api.Migrations
                     b.Property<bool>("Required")
                         .HasColumnType("bit");
 
-                    b.Property<int>("SurveyId")
-                        .HasColumnType("int");
+                    b.Property<long>("SurveyId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Text")
                         .IsRequired()
@@ -62,17 +62,17 @@ namespace oceane_survey_api.Migrations
 
             modelBuilder.Entity("oceane_survey_api.Models.QuestionOption", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<int>("DisplayOrder")
                         .HasColumnType("int");
 
-                    b.Property<int>("QuestionId")
-                        .HasColumnType("int");
+                    b.Property<long>("QuestionId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Text")
                         .IsRequired()
@@ -120,11 +120,11 @@ namespace oceane_survey_api.Migrations
 
             modelBuilder.Entity("oceane_survey_api.Models.Survey", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("datetime2");
@@ -149,21 +149,6 @@ namespace oceane_survey_api.Migrations
                     b.ToTable("Surveys");
                 });
 
-            modelBuilder.Entity("oceane_survey_api.Models.SurveyRecipient", b =>
-                {
-                    b.Property<int>("SurveyId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RecipientId")
-                        .HasColumnType("int");
-
-                    b.HasKey("SurveyId", "RecipientId");
-
-                    b.HasIndex("RecipientId");
-
-                    b.ToTable("SurveyRecipients");
-                });
-
             modelBuilder.Entity("oceane_survey_api.Models.Question", b =>
                 {
                     b.HasOne("oceane_survey_api.Models.Survey", "Survey")
@@ -186,40 +171,14 @@ namespace oceane_survey_api.Migrations
                     b.Navigation("Question");
                 });
 
-            modelBuilder.Entity("oceane_survey_api.Models.SurveyRecipient", b =>
-                {
-                    b.HasOne("oceane_survey_api.Models.Recipient", "Recipient")
-                        .WithMany("SurveyRecipients")
-                        .HasForeignKey("RecipientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("oceane_survey_api.Models.Survey", "Survey")
-                        .WithMany("SurveyRecipients")
-                        .HasForeignKey("SurveyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Recipient");
-
-                    b.Navigation("Survey");
-                });
-
             modelBuilder.Entity("oceane_survey_api.Models.Question", b =>
                 {
                     b.Navigation("QuestionOptions");
                 });
 
-            modelBuilder.Entity("oceane_survey_api.Models.Recipient", b =>
-                {
-                    b.Navigation("SurveyRecipients");
-                });
-
             modelBuilder.Entity("oceane_survey_api.Models.Survey", b =>
                 {
                     b.Navigation("Questions");
-
-                    b.Navigation("SurveyRecipients");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,22 +1,23 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using oceane_survey_api.Helpers.Enums;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace oceane_survey_api.Models
 {
     public class Question
     {
         [Key]
-        public int Id { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public long Id { get; set; }
+        [Required]
         public string Text { get; set; }
-        public string Type { get; set; }
-        public bool Required { get; set; }
+        public QuestionType Type { get; set; }
+        public bool? Required { get; set; }
         public int DisplayOrder { get; set; }
         public string ConditionalLogic { get; set; }
 
-        // Clé étrangère vers Survey
-        public int SurveyId { get; set; }
-        public Survey Survey { get; set; }
-
-        // Relation 1:n avec QuestionOption
+        [ForeignKey("SurveyId")]
+        public long SurveyId { get; set; }
         public ICollection<QuestionOption> QuestionOptions { get; set; } = new List<QuestionOption>();
     }
 }

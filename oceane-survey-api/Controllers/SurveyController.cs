@@ -19,7 +19,9 @@ namespace oceane_survey_api.Controllers
         /// <summary>
         /// Crée un nouveau survey
         /// </summary>
+        /// 
         [HttpPost]
+        //[Route("CreateSurvey")]
         public async Task<IActionResult> CreateSurvey([FromBody] Survey survey)
         {
             if (survey == null)
@@ -28,13 +30,14 @@ namespace oceane_survey_api.Controllers
             }
 
             var createdSurvey = await _surveyService.CreateSurveyAsync(survey);
-            return CreatedAtAction(nameof(GetSurveyById), new { id = createdSurvey.Id }, createdSurvey);
+            return CreatedAtAction(nameof(GetSurveyById), createdSurvey);
         }
 
         /// <summary>
         /// Récupère tous les surveys
         /// </summary>
         [HttpGet]
+        //[Route("GetAllSurveys")]
         public async Task<ActionResult<IEnumerable<Survey>>> GetAllSurveys()
         {
             var surveys = await _surveyService.GetAllSurveysAsync();
@@ -45,6 +48,7 @@ namespace oceane_survey_api.Controllers
         /// Récupère un survey par ID
         /// </summary>
         [HttpGet("{id}")]
+        //[Route("GetSurveyById")]
         public async Task<IActionResult> GetSurveyById(int id)
         {
             var survey = await _surveyService.GetSurveyByIdAsync(id);
@@ -56,6 +60,7 @@ namespace oceane_survey_api.Controllers
         /// Modifie un survey existant
         /// </summary>
         [HttpPut("{id}")]
+        //[Route("UpdateSurvey")]
         public async Task<IActionResult> UpdateSurvey(int id, [FromBody] Survey updatedSurvey)
         {
             if (updatedSurvey == null) return BadRequest("Invalid survey data.");
@@ -70,6 +75,7 @@ namespace oceane_survey_api.Controllers
         /// Supprime un survey
         /// </summary>
         [HttpDelete("{id}")]
+        //[Route("DeleteSurveyById")]        
         public async Task<IActionResult> DeleteSurvey(int id)
         {
             var deleted = await _surveyService.DeleteSurveyAsync(id);

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace oceane_survey_api.Migrations
 {
     /// <inheritdoc />
-    public partial class survey : Migration
+    public partial class Surveys : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -32,7 +32,7 @@ namespace oceane_survey_api.Migrations
                 name: "Surveys",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -49,14 +49,14 @@ namespace oceane_survey_api.Migrations
                 name: "Questions",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Text = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Required = table.Column<bool>(type: "bit", nullable: false),
                     DisplayOrder = table.Column<int>(type: "int", nullable: false),
                     ConditionalLogic = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    SurveyId = table.Column<int>(type: "int", nullable: false)
+                    SurveyId = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -70,38 +70,14 @@ namespace oceane_survey_api.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "SurveyRecipients",
-                columns: table => new
-                {
-                    SurveyId = table.Column<int>(type: "int", nullable: false),
-                    RecipientId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SurveyRecipients", x => new { x.SurveyId, x.RecipientId });
-                    table.ForeignKey(
-                        name: "FK_SurveyRecipients_Recipients_RecipientId",
-                        column: x => x.RecipientId,
-                        principalTable: "Recipients",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_SurveyRecipients_Surveys_SurveyId",
-                        column: x => x.SurveyId,
-                        principalTable: "Surveys",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "QuestionOptions",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Text = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DisplayOrder = table.Column<int>(type: "int", nullable: false),
-                    QuestionId = table.Column<int>(type: "int", nullable: false)
+                    QuestionId = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -123,11 +99,6 @@ namespace oceane_survey_api.Migrations
                 name: "IX_Questions_SurveyId",
                 table: "Questions",
                 column: "SurveyId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_SurveyRecipients_RecipientId",
-                table: "SurveyRecipients",
-                column: "RecipientId");
         }
 
         /// <inheritdoc />
@@ -137,13 +108,10 @@ namespace oceane_survey_api.Migrations
                 name: "QuestionOptions");
 
             migrationBuilder.DropTable(
-                name: "SurveyRecipients");
+                name: "Recipients");
 
             migrationBuilder.DropTable(
                 name: "Questions");
-
-            migrationBuilder.DropTable(
-                name: "Recipients");
 
             migrationBuilder.DropTable(
                 name: "Surveys");

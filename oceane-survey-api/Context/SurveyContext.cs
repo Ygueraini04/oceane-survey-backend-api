@@ -10,47 +10,30 @@ public class SurveyContext : DbContext
     }
 
     public DbSet<Survey> Surveys { get; set; }
-    public DbSet<Recipient> Recipients { get; set; }
     public DbSet<Question> Questions { get; set; }
     public DbSet<QuestionOption> QuestionOptions { get; set; }
-    public DbSet<SurveyRecipient> SurveyRecipients { get; set; }
-
-    //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    //{
-    //    optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=SurveyDb;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False");
-    //}
+    public DbSet<Recipient> Recipients { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Survey>()
-            .Property(s => s.Id)
-            .UseIdentityColumn();
+        //// Relation Survey → Questions (OneToMany)
+        //modelBuilder.Entity<Question>()
+        //    .HasOne(q => q.Survey)
+        //    .WithMany(s => s.Questions)
+        //    .HasForeignKey(q => q.SurveyId)
+        //    .OnDelete(DeleteBehavior.Cascade);
 
-        // Configuration de la relation n:m entre Survey et Recipient
-        modelBuilder.Entity<SurveyRecipient>()
-            .HasKey(sr => new { sr.SurveyId, sr.RecipientId });
+        //// Relation Question → Options (OneToMany)
+        //modelBuilder.Entity<QuestionOption>()
+        //    .HasOne(o => o.Question)
+        //    .WithMany(q => q.QuestionOptions)
+        //    .HasForeignKey(o => o.QuestionId)
+        //    .OnDelete(DeleteBehavior.Cascade);
 
-        modelBuilder.Entity<SurveyRecipient>()
-            .HasOne(sr => sr.Survey)
-            .WithMany(s => s.SurveyRecipients)
-            .HasForeignKey(sr => sr.SurveyId);
-
-        modelBuilder.Entity<SurveyRecipient>()
-            .HasOne(sr => sr.Recipient)
-            .WithMany(r => r.SurveyRecipients)
-            .HasForeignKey(sr => sr.RecipientId);
-
-        // Configuration de la relation 1:n entre Survey et Question
-        modelBuilder.Entity<Question>()
-            .HasOne(q => q.Survey)
-            .WithMany(s => s.Questions)
-            .HasForeignKey(q => q.SurveyId);
-
-        // Configuration de la relation 1:n entre Question et QuestionOption
-        modelBuilder.Entity<QuestionOption>()
-            .HasOne(qo => qo.Question)
-            .WithMany(q => q.QuestionOptions)
-            .HasForeignKey(qo => qo.QuestionId);
+        // Enumérations sont stockées sous forme de string (optionnel)
+        modelBuilder.Entity<Survey>().Property(s => s.Status).HasConversion<string>();
+        modelBuilder.Entity<Question>().Property(q => q.Type).HasConversion<string>();
+        modelBuilder.Entity<Recipient>().Property(r => r.Type).HasConversion<string>();
     }
 }
 
